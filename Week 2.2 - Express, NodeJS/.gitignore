@@ -1,0 +1,24 @@
+node_modules/
+debug/
+target/
+/node_modules
+
+
+# eslint cache
+.eslintcache
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+*.test
+
+*.out
+
+go.work
+
+Cargo.lock
+
+**/*.rs.bk
