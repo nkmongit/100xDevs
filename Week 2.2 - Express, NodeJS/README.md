@@ -165,3 +165,17 @@ app.listen(PORT, () => {
 2. Try to create a http server from scratch in C
 3. Create an http server in rust using actix-web
 4. Create an http server in golang using the gurrila framework
+
+`How servers redirects to particular website?`
+
+- Lets's say you website is `https://nishantmohapatra.com`
+- You have registered this domain with DNS provider.
+- And this website is hosted in a server that has it's own IP `(12.1.1.1)` and there are many other websites are hosted there.
+- Whenever you hit on that domain, the domain points to that servers's IP and your web browser sends an header called `referrer` says that this request came from `https://nishantmohapatra.com` website so the server redirects to that particular IP.
+
+```md
+NOTES:
+
+1. A single process can only listen on a single PORT.
+2. If you don't specify a protocol and your request is `https` then the default port would be `443`.
+```
