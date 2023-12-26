@@ -182,5 +182,35 @@ In real scenario we have multiple backend servers, a cluster of them.
 - MongoDB lets you create databases.
 - In each DB, it lets you create tables (collections).
 - In each table, it lets you dump JSON data.
-- It is schemaless
+- It is schemaless. (don't have to define the structure of the data)
 - It scales well and is a decent choice for most use cases.
+
+To use mongodb as the backend for our application, we are going to use an ODM called `mongoose`, so we don't have to write everything from scratch.
+
+Mongoose can be used for writing MongoDB validation and casting.
+For which we can define a model, and according to that model we will add data to our mongodb.
+
+`101 on how to use mongoose`
+
+```js
+const mongoose = require('mongoose');
+// connecting to the backend
+mongoose.connect('mongodb://localhost:27017/user_app');
+
+// creating the model or defining the model first
+const User = mongoose.model('User', {
+  name: String,
+  username: String,
+  password: String,
+});
+
+// creating the object for the model
+const us1 = new User({
+  name: 'Nishant Mohapatra',
+  username: 'nkm@example.com',
+  password: '123',
+});
+
+// saving that object into the db
+us1.save().then(() => console.log('User registered'));
+```
