@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Intro</title>
+  </head>
+  <body>
+    <input id="val1" type="text" placeholder="Value 1" />
+    <br />
+    <br />
+    <input id="val2" type="text" placeholder="Value 2" />
+    <br />
+    <br />
+    <div id="sum"></div>
+    <br hidden />
+    <button onclick="calculateSum()">Calculate Sum</button>
+
+    <script>
+      function calculateSum() {
+        const val1 = document.getElementById('val1').value;
+        const val2 = document.getElementById('val2').value;
+        document.getElementById('sum').innerHTML =
+          parseInt(val1) + parseInt(val2);
+      }
+    </script>
+  </body>
+</html>
