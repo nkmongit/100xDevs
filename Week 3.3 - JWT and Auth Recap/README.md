@@ -59,7 +59,7 @@ If you lose the original JWT, then it is a problem.
 
 2. Decoding
 
-   - Decoding can be done by anyone, and the info can be seen by anyone.![JWT Decoding](/images/JWT%20Decode.png)
+   - Decoding can be done by anyone, and the info can be seen by anyone.![JWT Decoding]([/images/JWT%20Decode.png](https://github.com/nkmongit/100xDevs/blob/main/Week%203.3%20-%20JWT%20and%20Auth%20Recap/images/JWT%20Decode.png))
 
    ```js
    const decodedJWT = jwt.decode(token);
