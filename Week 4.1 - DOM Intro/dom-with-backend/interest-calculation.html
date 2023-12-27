@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interest Calculation</title>
+  </head>
+  <body>
+    <input id="principal" type="text" placeholder="Enter principal" />
+    <br />
+    <br />
+    <input id="rate" type="text" placeholder="Enter rate" />
+    <br />
+    <br />
+    <input id="time" type="text" placeholder="Enter time" />
+
+    <div id="total"></div>
+    <div id="interest"></div>
+    <br />
+    <button type="button" onclick="calculateInterest()">
+      Calulate Interest
+    </button>
+
+    <script>
+      function calculateInterest() {
+        const principal = document.getElementById('principal').value;
+        const rate = document.getElementById('rate').value;
+        const time = document.getElementById('time').value;
+        console.log(principal);
+        fetch(
+          `http://localhost:3000/interest?principal=${principal}&rate=${rate}&time=${time}`
+        )
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            return data;
+          })
+          .then((data) => {
+            const { total, interest } = data;
+            document.getElementById('total').innerHTML = total;
+            document.getElementById('interest').innerHTML = interest;
+          });
+      }
+    </script>
+  </body>
+</html>
