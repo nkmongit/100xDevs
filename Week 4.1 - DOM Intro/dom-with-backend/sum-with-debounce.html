@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input
+      oninput="debouncePopulateDiv()"
+      id="num1"
+      type="text"
+      placeholder="First Number"
+    />
+    <br />
+    <input
+      oninput="debouncePopulateDiv()"
+      id="num2"
+      type="text"
+      placeholder="Second Number"
+    />
+    <br />
+    <div id="finalSum"></div>
+
+    <script>
+      let interval;
+      function debouncePopulateDiv() {
+        // delay the call to populateDiv until i've not been called for 1000ms
+        // and i've been called atleast once
+        clearTimeout(interval);
+        interval = setTimeout(() => {
+          populateDiv();
+        }, 1000);
+      }
+      async function populateDiv() {
+        const num1 = document.getElementById('num1').value;
+        const num2 = document.getElementById('num2').value;
+        console.log(num2);
+        try {
+          const res = await fetch(
+            `http://localhost:3000/sum?a=${num1}&b=${num2}`
+          );
+          const sum = await res.json();
+          document.getElementById('finalSum').textContent = sum;
+        } catch (e) {
+          console.log('Could not make request');
+        }
+      }
+    </script>
+  </body>
+</html>

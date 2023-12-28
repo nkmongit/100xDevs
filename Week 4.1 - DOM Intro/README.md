@@ -48,12 +48,12 @@ Creating a simple website to calculate the sum of two numbers.
 
 Before solving this dynamic thing, first lets understand `classes` and `id` in HTML.
 
-1. class
+1. `class`
 
    - An attribute used to specify a class for an HTML element.
    - Multiple HTML elements can share the same class.
 
-2. id
+2. `id`
    - An attribute used to specify a id for an HTML element.
    - id names can't used more than once in other HTML elements.
    - Usually used in manipulating JavaScript.
@@ -154,4 +154,64 @@ Lets say we don't want to expose this logic to the frontend, so we put this busi
     }
   </script>
 </body>
+```
+
+The problem in the above code is if we know that we have to add only two numbers 123 and 433, but while inputting these numbers we are continously sending requests to our backend, and have already sent over 6 requests to the backend, but it should have been only 1 request.
+
+So to solve this issue we are going to use the concepts below.
+
+## Debounce and Throttle
+
+Here the problem with the event listener is we are using that to make frequent API request to our backend, even if we haven't yet filled all the input yet.
+
+These frequent API calls will affect our backend a lot.
+
+So to solve this we can make use of two methods `Debouncing` and `Throttling`.
+
+`Throttling`
+
+- It is useful when you want to ensure that a function is called at a limited rate or frequency, without missing any important inputs or events.
+
+`Example for Throttling:`
+
+- Imagine a real-time data processing application that recieves a high volume of incoming data streams.
+- If the data is processed too quickly, it may cause the application to become overwhelmed and unresponsive.
+- In this case, throttling the processing functiion to a specific frequency can help manage the load and maintain the performance of the application.
+
+`Debouncing`
+
+- It delays the execution of a function until after a certain amount of time has passed without the input being triggered again.
+- Search Filter
+
+`Example for Debouncing:`
+
+- Imagine you have a search bar on a website that sends a request to the server every time a user types a letter.
+- If the user types quickly, this could result in multiple requests being sent to the server in a short period of time, whiich can cause unnecessary load and slow down the website.
+
+- To prevent this, you could use a debounce function to delay the search requset util the user has finished typing.
+- For example, if you set a debounce of 500 miliseconds, the search request will only be sent after the user has stopped typing for half a second.
+- This ensures that only one request is sent to the server even if the user types quickly.
+
+```js
+let interval;
+function debouncePopulateDiv() {
+  // delay the call to populateDiv until i've not been called for 1000ms
+  // and i've been called atleast once
+  clearTimeout(interval);
+  interval = setTimeout(() => {
+    populateDiv();
+  }, 1000);
+}
+async function populateDiv() {
+  const num1 = document.getElementById('num1').value;
+  const num2 = document.getElementById('num2').value;
+  console.log(num2);
+  try {
+    const res = await fetch(`http://localhost:3000/sum?a=${num1}&b=${num2}`);
+    const sum = await res.json();
+    document.getElementById('finalSum').textContent = sum;
+  } catch (e) {
+    console.log('Could not make request');
+  }
+}
 ```
