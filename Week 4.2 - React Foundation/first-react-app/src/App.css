@@ -1,0 +1,32 @@
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Existing CSS styles... */
+
+.todo-item {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Other styles... */
+
+.todo-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.todo-description {
+  color: #555;
+}
+
+/* Add more styles as needed */

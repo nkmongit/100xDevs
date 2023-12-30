@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let gloablId = 1;
+      let todoState = [];
+      let oldTodoState = [];
+
+      function addTodo() {}
+
+      function removeTodo(todo) {}
+
+      function updateTodo(oldTodo, newTodo) {
+        const element = document.getElementById(oldTodo.id);
+
+        element.children[0].innerHTML = newTodo.title;
+        element.children[1].innerHTML = newTodo.description;
+        element.children[2].innerHTML = newTodo.completed
+          ? 'Mark as Done'
+          : 'Done';
+      }
+
+      function updateState(newTodos) {
+        // calculate the diff b/w newTodos and oldTodos
+        // More specifically, find out what todos are
+        // 1. added
+        // 2. updated
+        // 3. deleted
+        const added = [];
+        const deleted = [];
+        const updated = [];
+
+        // calculate these 3 arrays
+        // call addTodo, removeTodo, updateTodo on each of the
+        // elements
+        oldTodoState = newTodos;
+      }
+
+      function addTodo() {
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+
+        todoState.push({
+          title: title,
+          description: description,
+          id: gloablId++;
+        })
+
+        updateState(todoState)
+      }
+    </script>
+  </body>
+</html>

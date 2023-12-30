@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+  </head>
+  <body>
+    <input id="name" type="text" placeholder="Todo Name" />
+    <br />
+    <br />
+    <input id="description" type="text" placeholder="Todo Description" />
+    <br />
+    <br />
+    <button onclick="addTodo()">Add Todo</button>
+    <br />
+    <br />
+    <div id="container"></div>
+
+    <script>
+      let globalId = 1;
+      function addTodo() {
+        const name = document.getElementById('name').value;
+        const description = document.getElementById('description').value;
+        createTodos(name, description, globalId++);
+      }
+
+      function createTodos(name, description, globalId) {
+        const outerDiv = document.createElement('div');
+        const todoNameDiv = document.createElement('div');
+        const todoDesDiv = document.createElement('div');
+        const markBtn = document.createElement('button');
+
+        todoDesDiv.innerHTML = description;
+        todoNameDiv.innerHTML = name;
+        markBtn.innerHTML = 'Mark as Done';
+
+        outerDiv.appendChild(todoNameDiv);
+        outerDiv.appendChild(todoDesDiv);
+        outerDiv.appendChild(markBtn);
+        outerDiv.setAttribute('id', globalId);
+
+        document.getElementById('container').appendChild(outerDiv);
+
+        markBtn.setAttribute('onclick', `markAsDone(${globalId})`);
+      }
+
+      function markAsDone(todoId) {
+        document.getElementById(todoId).children[2].innerHTML = 'Done';
+      }
+    </script>
+  </body>
+</html>
