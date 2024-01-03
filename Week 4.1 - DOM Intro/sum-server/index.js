@@ -1,13 +1,13 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-let cors = require('cors');
+let cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
 
 // https://sum-server.100xdevs.com/sum?a=1&b=2
 
-app.get('/sum', function (req, res) {
+app.get("/sum", function (req, res) {
   const a = req.query.a;
   const b = req.query.b;
 
@@ -19,7 +19,7 @@ app.get('/sum', function (req, res) {
   res.json(n1 + n2);
 });
 
-app.get('/interest', function (req, res) {
+app.get("/interest", function (req, res) {
   const principal = parseInt(req.query.principal);
   const rate = parseInt(req.query.rate);
   const time = parseInt(req.query.time);
@@ -35,5 +35,5 @@ app.get('/interest', function (req, res) {
 });
 
 app.listen(3000, () => {
-  console.log('Server Running');
+  console.log("Server Running");
 });

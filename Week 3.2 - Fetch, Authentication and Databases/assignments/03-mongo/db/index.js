@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/book');
+
+try {
+  mongoose.connect('mongodb://localhost:27017/book');
+  console.log('Connected to DB');
+} catch (e) {
+  console.log('Could not connect to the DB');
+}
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
