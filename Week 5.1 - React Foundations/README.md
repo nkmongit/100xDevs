@@ -159,3 +159,5 @@ export default App;
 ```
 
 So basically the JSX helps us converting that old React syntax with HTML-Like syntax.
+
+Anytime a parent re-renders its child also re-renders.
