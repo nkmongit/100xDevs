@@ -6,10 +6,7 @@ In this moodule we are doing a deeper dive into the following topics.
 2. Re-rendering
 3. Key
 4. Wrapper Components
-5. useEffect
-6. useMemo
-7. useCallback
-8. useRef
+5. Hooks
 
 ## React Component Returns
 
@@ -136,4 +133,82 @@ In the above code snippet we have introduced a new component called `HeadWithBut
 So whenever there's a change in the state only the `HeaderWithButton`
 component changes and the `Header` components where the state has affected.
 
-Other than passing the statte down and creating another component, we can use something called as `React.memo`
+Other than passing the state down and creating another component, we can use something called as `React.memo`
+
+But the `React.memo` won't work if the elements are wrapped inside fragments `<></>`
+
+NOTE: Never push state from child to a parent it's an anti pattern.
+
+## Keys in React
+
+Lets create a simple todo app that renders 3 todos
+
+1. Create a Todo component that accepts title, description as input.
+2. Initialise a state array to render all the TODOs.
+3. Iterate over the array to render all the TODOs.
+4. A button in the top level App component to add a new TODO.
+
+The concept of providing a key to the react is to help raect differentiate whenever an element gets removed from where, added to where and giving an key is the best way to solve this.
+The `key` should be unique.
+
+## Wrapper Components
+
+```jsx
+function App() {
+  return (
+    <div>
+      <CardWrapper innerComponent={<TextComponent />} />;
+    </div>
+  );
+}
+
+function TextComponent() {
+  return <div>Hi there!</div>;
+}
+
+function CardWrapper({ innerComponent }) {
+  return (
+    <div style={{ border: '2px solid black', padding: 20 }}>
+      <innerComponent />;
+    </div>
+  );
+}
+```
+
+## Hooks
+
+- useEffect
+- useMemo
+- useCallback
+- useRef
+- useReducer
+- useContext
+- useLayoutEffect
+
+We have already discussed about the `useState` hook.
+
+Hooks in React are functions that allow you to "hook into" React state and lifecycle features from function components.
+
+Lifecycle events were first introduced in class based components, those were componentDidMount(), shouldComponentUpdate().
+
+But in the newer version of react we have introduced with the functional based components where, we use such hooks to do all the lifecycle events.
+
+You can't write `fetch()` solely inside a component it cause to infinite loop, so we have to use a hook called `useEffect()`
+
+That means if this component mounts do something.
+
+```jsx
+const { useEffect } = require('react');
+
+function App() {
+  useEffect(function () {
+    alert('Hi');
+  }, []);
+
+  return <div>Hi there</div>;
+}
+
+export default App;
+```
+
+If we run the above code, the first thing that comes on the screen is an alert box saying Hi, because useEffect hook would render it on the first load on the page, as it's `dependency array` is empty that means it should run on the first mount, if we would put more values in the `dependency arry` if there state changes then it would mount again.
