@@ -137,7 +137,7 @@ Other than passing the state down and creating another component, we can use som
 
 But the `React.memo` won't work if the elements are wrapped inside fragments `<></>`
 
-NOTE: Never push state from child to a parent it's an anti pattern.
+`NOTE`: Never push state from child to a parent it's an anti pattern.
 
 ## Keys in React
 
@@ -189,7 +189,7 @@ We have already discussed about the `useState` hook.
 
 Hooks in React are functions that allow you to "hook into" React state and lifecycle features from function components.
 
-Lifecycle events were first introduced in class based components, those were componentDidMount(), shouldComponentUpdate().
+Lifecycle events were first introduced in class based components, those were `componentDidMount()`, `shouldComponentUpdate()`.
 
 But in the newer version of react we have introduced with the functional based components where, we use such hooks to do all the lifecycle events.
 
@@ -211,4 +211,4 @@ function App() {
 export default App;
 ```
 
-If we run the above code, the first thing that comes on the screen is an alert box saying Hi, because useEffect hook would render it on the first load on the page, as it's `dependency array` is empty that means it should run on the first mount, if we would put more values in the `dependency arry` if there state changes then it would mount again.
+If we run the above code, the first thing that comes on the screen is an alert box saying Hi, because useEffect hook would render it on the first load on the page, as it's `dependency array` is empty that means it should run on the first mount, if we would put more values in the `dependency array` if there state changes then it would mount again.
