@@ -117,7 +117,8 @@ const setMessagingNotificationCount = useSetRecoilState(messagingCount);
   onCLick={() => {
     setMessagingNotificationCount((count) => count + 1);
   }}
-></button>;
+>
+</button>;
 ```
 
 Here we did the same for updating the message notification.
@@ -157,8 +158,7 @@ A `selector` is derived from other atoms.
 export const totalNotificationSelector = selector({
   key: "totalNotificationSelector",
   get: ({ get }) => {
-    const total =
-      get(networkAtom) +
+    const total = get(networkAtom) +
       get(jobsAtom) +
       get(notificationAtom) +
       get(messagingAtom);
@@ -350,6 +350,205 @@ All the TODOs can be hardcoded as a variable.
     "title": "Todo 2",
     "description": "This is a todo",
     "completed": false
+  }
+}
+```
+
+- Would you have a single atom?
+- Would you have one atom per todo?
+- How would you create (and delete) todos dynamically?
+
+The problem here is that atom works when only one element is present in it. Here
+we are trying to use the `<Todo/>` component and passing the id for the todos
+like this `<Todo id={1}/>` and `<Todo id={2} />`, the problem here is how do you
+dynamically create `atoms`.
+
+We can do like this where we define a todo:
+
+```js
+const todoAtom = atom({
+  key: "todoAtom",
+  default: {
+    id: 1,
+    title: "Go to gym",
+    description: "Hit the gym",
+  },
+});
+```
+
+Now the problem with this `atom` is that we are passing that one todo only and
+this is not dynamic. Here we would have to create different atoms for different
+components.
+
+`How would you solve this?`
+
+Using the `atomFamily`, rather than subscribing to the `atom` we would subscribe
+to the `atomFamily` this basically means whenever you know there's multiple
+atoms, that we have create one `atom` per `item`, we create an `atomFamily`.
+
+The `atomFamily` says whenever a `component` needs a new atom from the
+`atomFamily` or an `atom` specific to that `component` that will give the input
+to the `atomFamily` and it will give the output / return the specific atom.
+
+And this how you would dynamically create more and more atoms for use case like
+this.
+
+```js
+export const todos = atom({
+  key: "todos",
+  default: TODOS,
+});
+```
+
+```js
+function TodoGet({ id }) {
+  const todo = useRecoilValue(todos);
+  console.log(todo);
+
+  return (
+    <div>
+      {todo.map((t, index) =>
+        t.id == id
+          ? (
+            <div key={index}>
+              {t.title} {t.description}
+            </div>
+          )
+          : null
+      )}
+    </div>
+  );
+}
+```
+
+This would work but it won't be sufficient enough to because if we make changes
+to one todo, it will re-render other todos too.
+
+So the better approach would be adding an `atomFamily`, which will have the
+logic for adding the todos dynamically and provide the todos that are needed,
+and update them without affecting the other atoms.
+
+```js
+export const todosAtomFamily = atomFamily({
+  key: "todosAtomFamily",
+  default: (id) => {
+    return TODOS.find((x) => x.id === id);
+  },
+});
+```
+
+In the above code we have defined an `atomFamily` where in the default value we
+are using the `TODOS` array where we are finding the todos whih have the passed
+`id` and returning it the the default value.
+
+```js
+function Todo({ id }) {
+  // const [todo, setTodo] = useRecoilState(todosAtomFamily(id));
+  const todo = useRecoilValue(todosAtomFamily(id));
+
+  return (
+    <>
+      {todo.title}
+      {todo.description}
+      <br />
+    </>
+  );
+}
+```
+
+Now with this we ahve passed down the `id` as props and passing it to the
+`todosAtomFamily` that we created in our `atoms.js`.
+
+What it does is we pass the only todo id we need to render and the
+`todosAtomFamily` gives the atom that we need, not the whole.
+
+Basically the `atomFamily` function returns a function i.e an `atom`, to see
+whether this actually works and we don't get any re-renders even if any of the
+todo get changes that means any changes to the todoAtom i.e being returned from
+the `todosAtomFamily`.
+
+We would make use of `useEffect` hook and `setTimeout` to update our todo with
+id `2` after 5 seconds and lets see if the todos with the id `2` passed in them,
+all of them re-renders or just one gets re-render and other values gets.
+
+### selectorFamily
+
+In the TODO application, lets say you are supposed to get TODOs from a server.
+
+`https://sum-server.100xdevs.com/todo?id=1`
+
+We could do something like this:
+
+```js
+export const todosAtomFamily = atomFamily({
+  key: "todosAtomFamily",
+  default: selector({
+    key: "todosSelector",
+    get: async function ({ get }) {
+      const res = await axios.get(
+        `https://sum-server.100xdevs.com/todo?id=${id}`,
+      );
+      return res.data.todo;
+    },
+  }),
+});
+```
+
+We can do an async task in a `selector` but here the problem is it's a dynamic
+selector needs to return different value given a different input, that `id`
+field is dynamic.
+
+Now to solve this problem we would use the `selectorFamily`
+
+```js
+export const todosAtomFamily = atomFamily({
+  key: "todosAtomFamily",
+  default: selectorFamily({
+    key: "todosSelectorFamily",
+    get: function (id) {
+      return async function ({ get }) {
+        const res = await axio.get(
+          `https://sum-server.100xdevs.com/todo?id=${id}`,
+        );
+        return res.data.todo;
+      };
+    },
+  }),
+});
+```
+
+### useRecoilStateLoadable & useRecoilValueLoadable
+
+`What happens when the values aren't loaded immediately?`
+
+- For example, the TODOs that are coming back from the server?
+
+- How can we show loader on screen when that happens rather than an empty state?
+
+We gonna wrap our atoms with these `Loadable` hooks that `Recoil` provides us
+with, this becomes very handy.
+
+Then the loadable function returns an object called `state` where if resolved
+and we have the values from the backend it would have the state as `hasValue`,
+if the `state` is in `loading` we could render a `skeleton` or a `loading`
+component, it also has the value called `hasError` where the promise from our
+backend has returned an error.
+
+```js
+function Todo({ id }) {
+  const [todo, setTodo] = useRecoilStateLoadable(todosAtomFamily(id));
+  if (todo.state === "loading") {
+    return <div>loading</div>;
+  } else if (todo.state === "hasValue") {
+    return (
+      <>
+        {todo.contents.title}
+        {todo.contents.description}
+        <br />
+      </>
+    );
+  } else if (todo.state === "hasError") {
+    return <div>Error while getting data from backend</div>;
   }
 }
 ```
