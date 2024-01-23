@@ -77,5 +77,4 @@ and ease of handling in the future. Note that the Apollo GraphQL client does not
 support the `Suspense` API, but we can expect more libraries in the React
 ecosystem to adopt `Suspense` in the future.
 
-```
-```
+
